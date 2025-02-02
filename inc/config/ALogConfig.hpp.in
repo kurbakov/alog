@@ -1,0 +1,8 @@
+#pragma once
+
+#include <alog/Defs.hpp>
+
+static constexpr ::alog::Level ALOG_LEVEL=@ALOG_LEVEL@;
+static constexpr int ALOG_CPU_ID=@ALOG_CPU_ID@;
+static constexpr size_t ALOG_LANE_LEN=@ALOG_LANE_LEN@;
+static constexpr size_t ALOG_CHANNEL_LEN=@ALOG_CHANNEL_LEN@;

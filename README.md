@@ -1,2 +1,4 @@
-# alog
-Asyn logger
+# ::alog
+
+Asynchronous logger designed with latency in mind
+
