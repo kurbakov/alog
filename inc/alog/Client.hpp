@@ -32,12 +32,12 @@ namespace alog {
         }
 
         template<class... Args>
-        void log(const Metadata *meta, timeval tv, Args... args) {
-            m_channel.send(meta, m_tid, tv, args...);
+        void log(const Metadata *meta, Args... args) {
+            m_channel.send(meta, m_tid, args...);
         }
 
-        void log(const Metadata *meta, timeval tv) {
-            m_channel.send(meta, m_tid, tv);
+        void log(const Metadata *meta) {
+            m_channel.send(meta, m_tid);
         }
 
     private:

@@ -21,8 +21,8 @@ namespace alog {
     };
 
     std::string_view LevelToStr(Level &level) {
-        std::array<std::string_view, static_cast<size_t>(Level::Last)> map{
-                "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
+        std::array<std::string_view, static_cast<size_t>(Level::Last)+1> map{
+                "DEBUG", "INFO", "WARN", "ERROR", "FATAL", "UNKNOWN_LEVEL"};
 
         return map[static_cast<uint8_t>(level)];
     }
@@ -40,11 +40,9 @@ namespace alog {
     };
 
     struct Event {
-        Level level;
-        std::source_location location;
+        const Metadata* meta;
         std::thread::id tid;
-        uint64_t tv_sec;
-        uint64_t tv_usec;
+        timeval tv;
         const char *msg;
     };
 }// namespace alog

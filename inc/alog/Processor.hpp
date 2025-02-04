@@ -36,7 +36,9 @@ namespace alog {
                     }
 
                     if (channel->recv(ev)) {
-                        m_stream->log(ev.tv_sec, ev.tv_usec, ev.level, ev.location, ev.tid, ev.msg);
+                        auto msg = ev.msg !=
+                                    nullptr ? ev.msg : ev.meta->fmt;
+                        m_stream->log(ev.tv.tv_sec, ev.tv.tv_usec, ev.meta->level, ev.meta->location, ev.tid, msg.data());
                         channel->free(const_cast<char *>(ev.msg));
                         ev.msg = nullptr;
                     }

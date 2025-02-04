@@ -43,14 +43,13 @@ namespace {
 #define LOG(severity, format, ...)                                                              \
     do {                                                                                        \
         static_assert(alog::placeholders_count(format, "{}") == alog::args_count(__VA_ARGS__)); \
-        if constexpr (severity >= ALOG_LEVEL && severity < alog::Level::Last) {             \
+        if constexpr (severity >= ALOG_LEVEL && severity < alog::Level::Last) {                 \
             constexpr static alog::Metadata meta{                                               \
                     .level = severity,                                                          \
                     .location = std::source_location::current(),                                \
                     .fmt = format,                                                              \
             };                                                                                  \
-            auto tv = alog::microsecond_time();                                                 \
-            client.log(&meta, tv, ##__VA_ARGS__);                                               \
+            client.log(&meta, ##__VA_ARGS__);                                                   \
         }                                                                                       \
     } while (0)
 
