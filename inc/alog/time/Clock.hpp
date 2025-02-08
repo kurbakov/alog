@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <sys/time.h>
+#include <chrono>
 
 namespace alog {
     /**
@@ -21,10 +22,27 @@ namespace alog {
         return 0;
     }
 
+    inline __attribute__((always_inline)) uint64_t second_time() { return time(nullptr); }
+
     inline __attribute__((always_inline)) timeval microsecond_time() {
         timeval tv{};
         gettimeofday(&tv, nullptr);
 
         return tv;
     }
+
+    inline __attribute__((always_inline)) timespec nanosecond_time()
+    {
+        timespec timestamp{};
+        clock_gettime(CLOCK_MONOTONIC, &timestamp);
+
+        return timestamp;
+    }
+
+    inline __attribute__((always_inline)) auto chrono_time()
+    {
+        return std::chrono::high_resolution_clock::now();
+    }
+
+
 }// namespace alog
