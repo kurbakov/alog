@@ -1,10 +1,10 @@
 #pragma once
 
 #include <cstdint>
-#include <format>
 #include <string_view>
-#include <sys/time.h>
 #include <source_location>
+#include <thread>
+#include <ctime>
 
 namespace alog {
 

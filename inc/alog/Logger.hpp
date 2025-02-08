@@ -8,9 +8,8 @@
 #include "Processor.hpp"
 #include "Utils.hpp"
 
-#include "time/Clock.hpp"
-
 #include "ALogConfig.hpp"
+#include "stream/StreamIO.hpp"
 
 namespace {
     thread_local alog::Client client;

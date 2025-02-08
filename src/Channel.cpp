@@ -21,9 +21,6 @@ namespace alog {
     [[nodiscard]] bool Channel::empty() const { return m_queue.empty(); }
 
     void Channel::free(char *mem) {
-        if (mem == nullptr) [[unlikely]] {
-            return;
-        }
         m_pool.free(mem);
     }
 } // ns alog

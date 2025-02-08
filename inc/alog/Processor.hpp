@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <set>
 #include <thread>
 
@@ -9,9 +8,7 @@
 
 #include "concurrency/SpinLock.hpp"
 #include "concurrency/Utils.hpp"
-
 #include "stream/StreamBase.hpp"
-#include "stream/StreamIO.hpp"
 
 
 namespace alog {
