@@ -17,9 +17,11 @@
 namespace alog {
 
     class Processor final {
+        using mutex_t = SpinLock;
+
         static Processor *m_instance;
         std::set<Channel *> m_channels{};
-        std::mutex m_channelsLock{};
+        mutex_t m_channelsLock{};
         std::atomic_bool m_isRunning{false};
         std::thread m_runnerThread;
         std::unique_ptr<StreamBase> m_stream{nullptr};

@@ -14,7 +14,7 @@ namespace alog {
 
         Event ev;
         while (m_isRunning.load()) {
-            std::lock_guard<std::mutex> guard(m_channelsLock);
+            std::lock_guard<mutex_t> guard(m_channelsLock);
             for (auto *channel: m_channels) {
                 if (not channel) {
                     break;
@@ -43,13 +43,13 @@ namespace alog {
 
     void Processor::subscribe(Channel *channel) {
         // add channel
-        std::lock_guard<std::mutex> lock(m_channelsLock);
+        std::lock_guard<mutex_t> lock(m_channelsLock);
         m_channels.insert(channel);
     }
 
     void Processor::unsubscribe(Channel *channel) {
         // remove a channel
-        std::lock_guard<std::mutex> guard(m_channelsLock);
+        std::lock_guard<mutex_t> guard(m_channelsLock);
         m_channels.erase(channel);
     }
 
