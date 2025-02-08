@@ -1,4 +1,7 @@
 #include "alog/Processor.hpp"
+#include "alog/concurrency/Utils.hpp"
+
+#include "ALogConfig.hpp"
 
 namespace alog {
     Processor *Processor::m_instance = nullptr;
@@ -10,17 +13,17 @@ namespace alog {
     }
 
     void Processor::run() {
+        if constexpr (0 <= ALOG_CPU_ID) {
+            set_cpu_affinity(ALOG_CPU_ID);
+        }
+
         m_isRunning.store(true);
 
         Event ev;
         while (m_isRunning.load()) {
             std::lock_guard<mutex_t> guard(m_channelsLock);
             for (auto *channel: m_channels) {
-                if (not channel) {
-                    break;
-                }
-
-                if (channel->recv(ev)) {
+                if (channel && channel->recv(ev)) {
                     auto msg = ev.msg !=
                                nullptr ? ev.msg : ev.meta->fmt;
                     m_stream->log(ev.tv.tv_sec, ev.tv.tv_usec, ev.meta->level, ev.meta->location, ev.tid, msg.data());
@@ -39,7 +42,6 @@ namespace alog {
     void Processor::set_stream(StreamBase *stream) {
         m_stream.reset(stream);
     }
-
 
     void Processor::subscribe(Channel *channel) {
         // add channel

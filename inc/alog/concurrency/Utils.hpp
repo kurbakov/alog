@@ -3,6 +3,7 @@
 #include <iostream>
 #include <pthread.h>
 #include <thread>
+#include <threads.h>
 
 namespace alog {
     inline void set_cpu_affinity(int cpu_id) {
@@ -26,7 +27,12 @@ namespace alog {
         return pthread_self();
     }
 
-    inline __attribute__((always_inline)) auto get_tid_c() {
+    inline __attribute__((always_inline)) auto get_tid_c_v1() {
         return gettid();
     }
+
+    inline __attribute__((always_inline)) auto get_tid_c_v2() {
+        return thrd_current();
+    }
+
 }// namespace alog

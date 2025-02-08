@@ -10,7 +10,8 @@ namespace alog {
 
     public:
         auto& getTimeBuffer() {return timeBuffer;}
-        auto getTimeFormat() {return timeFormat;}
+        static auto getTimeFormat() {return timeFormat;}
+        
         virtual void log(uint64_t tv_sec, uint64_t tv_usec, Level level, const std::source_location sl, std::thread::id tid, const char *log) {
             // do nothing
         }
