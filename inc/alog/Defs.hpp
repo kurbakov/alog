@@ -4,10 +4,7 @@
 #include <format>
 #include <string_view>
 #include <sys/time.h>
-
-#include "concurrency/RingBuffer.hpp"
-#include "memory/FixSizePool.hpp"
-
+#include <source_location>
 
 namespace alog {
 
@@ -20,7 +17,7 @@ namespace alog {
         Last,
     };
 
-    std::string_view LevelToStr(Level &level) {
+    inline std::string_view LevelToStr(const Level &level) {
         std::array<std::string_view, static_cast<size_t>(Level::Last)+1> map{
                 "DEBUG", "INFO", "WARN", "ERROR", "FATAL", "UNKNOWN_LEVEL"};
 

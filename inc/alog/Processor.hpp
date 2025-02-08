@@ -24,48 +24,16 @@ namespace alog {
         std::thread m_runnerThread;
         std::unique_ptr<StreamBase> m_stream{nullptr};
 
-        void run() {
-            m_isRunning.store(true);
+        Processor();
 
-            Event ev;
-            while (m_isRunning.load()) {
-                std::lock_guard<std::mutex> guard(m_channelsLock);
-                for (auto *channel: m_channels) {
-                    if (not channel) {
-                        break;
-                    }
-
-                    if (channel->recv(ev)) {
-                        auto msg = ev.msg !=
-                                    nullptr ? ev.msg : ev.meta->fmt;
-                        m_stream->log(ev.tv.tv_sec, ev.tv.tv_usec, ev.meta->level, ev.meta->location, ev.tid, msg.data());
-                        channel->free(const_cast<char *>(ev.msg));
-                        ev.msg = nullptr;
-                    }
-                }
-            }
-        }
-
-        void stop() {
-            m_isRunning.store(false);
-            m_runnerThread.join();
-        }
-
-        Processor() {
-            m_runnerThread = std::thread([&]() {
-                run();
-            });
-        }
+        void run();
+        void stop();
 
     public:
         static void init() {
             if (m_instance == nullptr) {
                 m_instance = new Processor();
             }
-        }
-
-        void set_stream(StreamBase *stream) {
-            m_stream.reset(stream);
         }
 
         static void deinit() {
@@ -81,18 +49,10 @@ namespace alog {
             return m_instance;
         }
 
-        void subscribe(Channel *channel) {
-            // add channel
-            std::lock_guard<std::mutex> lock(m_channelsLock);
-            m_channels.insert(channel);
-        }
+        void set_stream(StreamBase *stream);
 
-        void unsubscribe(Channel *channel) {
-            // remove a channel
-            std::lock_guard<std::mutex> guard(m_channelsLock);
-            m_channels.erase(channel);
-        }
+        void subscribe(Channel *channel);
+
+        void unsubscribe(Channel *channel);
     };
-
-    Processor *Processor::m_instance = nullptr;
 }// namespace alog

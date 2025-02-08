@@ -6,10 +6,13 @@
 #include <thread>
 
 #include "ALogConfig.hpp"
+#include "time/Clock.hpp"
+#include "concurrency/RingBuffer.hpp"
+#include "memory/FixSizePool.hpp"
 
 namespace alog {
 
-    class Channel {
+    class Channel final {
     public:
         template<typename... Args>
         bool send(const Metadata *meta, const std::thread::id &id, Args &&...args) {
@@ -30,30 +33,13 @@ namespace alog {
             return m_queue.tryPush(ev);
         }
 
-        bool send(const Metadata *meta, const std::thread::id &id) {
-            Event ev{
-                    .meta = meta,
-                    .tid = id,
-                    .tv = alog::microsecond_time(),
-                    .msg = nullptr,
-            };
+        bool send(const Metadata *meta, const std::thread::id &id);
 
-            return m_queue.tryPush(ev);
-        }
+        bool recv(Event &log);
 
+        [[nodiscard]] bool empty() const;
 
-        bool recv(Event &log) {
-            return m_queue.tryPop(log);
-        }
-
-        [[nodiscard]] bool empty() const { return m_queue.empty(); }
-
-        void free(char *mem) {
-            if (mem == nullptr) [[unlikely]] {
-                return;
-            }
-            m_pool.free(mem);
-        }
+        void free(char *mem);
 
     private:
         RingBuffer<Event, ALOG_CHANNEL_LEN> m_queue;

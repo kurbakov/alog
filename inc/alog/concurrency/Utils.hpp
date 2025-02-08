@@ -4,7 +4,7 @@
 #include <pthread.h>
 
 namespace alog {
-    void set_cpu_affinity(int cpu_id) {
+    inline void set_cpu_affinity(int cpu_id) {
         cpu_set_t cpu_set;
         CPU_ZERO(&cpu_set);
         CPU_SET(cpu_id, &cpu_set);
