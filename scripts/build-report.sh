@@ -31,6 +31,14 @@ echo "Run benchmark tests:"
 cd ../../
 
 echo "======================================================="
+echo "BUILD integration test ................................"
+echo "======================================================="
+mkdir -p report/build-integr && cd report/build-integr
+cp -f ../../test/integr/* ./
+./build.sh
+cd ../../
+
+echo "======================================================="
 echo "BUILD gcc address sanitizer ..........................."
 echo "======================================================="
 mkdir -p report/build-gcc-asan && cd report/build-gcc-asan
