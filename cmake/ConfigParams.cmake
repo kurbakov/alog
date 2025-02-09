@@ -15,5 +15,5 @@ if(NOT DEFINED ALOG_LEVEL)
     set(ALOG_LEVEL ::alog::Level::INFO)
 endif()
 
-configure_file(${CMAKE_SOURCE_DIR}/inc/config/ALogConfig.hpp.in ${CMAKE_BINARY_DIR}/inc/config/ALogConfig.hpp)
-include_directories(${CMAKE_BINARY_DIR}/inc/config/)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/../inc/config/ALogConfig.hpp.in ${CMAKE_CURRENT_LIST_DIR}/../inc/gen/config/ALogConfig.hpp)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/../inc/gen/config/)
