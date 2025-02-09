@@ -22,6 +22,8 @@ include(cmake/ConfigParams.cmake)
 set(LIB_NAME alog)
 file(GLOB_RECURSE LIB_SRC "src/*.cpp")
 add_library(${LIB_NAME} STATIC ${LIB_SRC})
+target_include_directories(${LIB_NAME} PUBLIC ./inc)
+target_include_directories(${LIB_NAME} PUBLIC ./inc/gen/config/)
 
 # ========================================
 # Unit tests
