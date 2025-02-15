@@ -4,7 +4,8 @@
 
 #include <alog/concurrency/RingBuffer.hpp>
 
-static void pinThread(int cpu) {
+static void pinThread(int cpu)
+{
     if (cpu < 0) {
         return;
     }
@@ -20,26 +21,27 @@ static void pinThread(int cpu) {
 constexpr auto cpu1 = 1;
 constexpr auto cpu2 = 2;
 
-static void BM_RingBuffer(benchmark::State &state) {
+static void BM_RingBuffer(benchmark::State& state)
+{
     alog::RingBuffer<int, 1024> buffer;
 
     auto consumer = std::jthread(
-            [&buffer]() {
-                pinThread(cpu1);
+        [&buffer]() {
+            pinThread(cpu1);
 
-                int val;
-                while (true) {
-                    while (not buffer.tryPop(val)) {
-                        // loop untill the value is pulled!
-                    }
-                    benchmark::DoNotOptimize(val);
-
-                    if (val == -1) {
-                        // once the queue has -1 -> break;
-                        break;
-                    }
+            int val;
+            while (true) {
+                while (not buffer.tryPop(val)) {
+                    // loop untill the value is pulled!
                 }
-            });
+                benchmark::DoNotOptimize(val);
+
+                if (val == -1) {
+                    // once the queue has -1 -> break;
+                    break;
+                }
+            }
+        });
 
     // give some time to start the consumer thread
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -48,7 +50,7 @@ static void BM_RingBuffer(benchmark::State &state) {
     pinThread(cpu2);
 
     int val = 0;
-    for (auto _: state) {
+    for (auto _ : state) {
         while (auto again = not buffer.tryPush(val)) {
             benchmark::DoNotOptimize(again);
         }

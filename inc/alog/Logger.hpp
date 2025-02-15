@@ -12,30 +12,32 @@
 #include "stream/StreamIO.hpp"
 
 namespace {
-    thread_local alog::Client client;
+thread_local alog::Client client;
 }
 
 namespace alog {
-    template<Stream S>
-    void initLogger();
+template <Stream S>
+void initLogger();
 
-    template<>
-    void initLogger<Stream::IO>() {
-        Processor::init();
-        auto *processor = Processor::get();
-        processor->set_stream(new StreamIO());
-        std::atexit([]() { Processor::deinit(); });
-    }
+template <>
+void initLogger<Stream::IO>()
+{
+    Processor::init();
+    auto* processor = Processor::get();
+    processor->set_stream(new StreamIO());
+    std::atexit([]() { Processor::deinit(); });
+}
 
-    template<>
-    void initLogger<Stream::DevNull>() {
-        Processor::init();
-        auto *processor = Processor::get();
-        processor->set_stream(new StreamBase());
-        std::atexit([]() { Processor::deinit(); });
-    }
+template <>
+void initLogger<Stream::DevNull>()
+{
+    Processor::init();
+    auto* processor = Processor::get();
+    processor->set_stream(new StreamBase());
+    std::atexit([]() { Processor::deinit(); });
+}
 
-}// namespace alog
+} // namespace alog
 
 namespace {
 
@@ -43,17 +45,16 @@ namespace {
     do {                                                                                        \
         static_assert(alog::placeholders_count(format, "{}") == alog::args_count(__VA_ARGS__)); \
         if constexpr (severity >= ALOG_LEVEL && severity < alog::Level::Last) {                 \
-            constexpr static alog::Metadata meta{                                               \
-                    .level = severity,                                                          \
-                    .location = std::source_location::current(),                                \
-                    .fmt = format,                                                              \
+            constexpr static alog::Metadata meta {                                              \
+                .level = severity,                                                              \
+                .location = std::source_location::current(),                                    \
+                .fmt = format,                                                                  \
             };                                                                                  \
             client.log(&meta, ##__VA_ARGS__);                                                   \
         }                                                                                       \
     } while (0)
 
-}// namespace
-
+} // namespace
 
 #define LOG_DEBUG(fmt, ...) LOG(alog::Level::DEBUG, fmt, ##__VA_ARGS__)
 #define LOG_INFO(fmt, ...) LOG(alog::Level::INFO, fmt, ##__VA_ARGS__)

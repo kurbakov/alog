@@ -1,6 +1,7 @@
 #include <alog/Logger.hpp>
 
-int main() {
+int main()
+{
     alog::initLogger<alog::Stream::IO>();
 
     for (int i = 0; i < 10; ++i) {

@@ -1,6 +1,7 @@
 #include <alog/Logger.hpp>
 
-int main() {
+int main()
+{
     alog::initLogger<alog::Stream::IO>();
 
     LOG_DEBUG("Simple DEBUG log to stdout");
