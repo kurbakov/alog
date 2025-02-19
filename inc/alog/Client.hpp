@@ -13,6 +13,17 @@ public:
 
     void log(const Metadata* meta);
 
+    void log(const std::string& st, const Metadata* meta)
+    {
+        m_channel.send(st, meta, m_tid);
+    }
+
+    template <class... Args>
+    void log(const std::string& st, const Metadata* meta, Args... args)
+    {
+        m_channel.send(st, meta, m_tid, args...);
+    }
+
     template <class... Args>
     void log(const Metadata* meta, Args... args)
     {

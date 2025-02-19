@@ -38,16 +38,23 @@ public:
     static void deinit()
     {
         if (m_instance) {
-            m_instance->stop();
+            if (m_instance->is_running()) {
+                m_instance->stop();
 
-            delete m_instance;
-            m_instance = nullptr;
+                delete m_instance;
+                m_instance = nullptr;
+            }
         }
     }
 
     static Processor* get()
     {
         return m_instance;
+    }
+
+    bool is_running()
+    {
+        return m_isRunning.load();
     }
 
     void set_stream(StreamBase* stream);

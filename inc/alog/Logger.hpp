@@ -44,13 +44,22 @@ namespace {
 #define LOG(severity, format, ...)                                                              \
     do {                                                                                        \
         static_assert(alog::placeholders_count(format, "{}") == alog::args_count(__VA_ARGS__)); \
-        if constexpr (severity >= ALOG_LEVEL && severity < alog::Level::Last) {                 \
+        if constexpr (severity >= ALOG_LEVEL && severity < alog::Level::FATAL) {                \
             constexpr static alog::Metadata meta {                                              \
                 .level = severity,                                                              \
                 .location = std::source_location::current(),                                    \
                 .fmt = format,                                                                  \
             };                                                                                  \
             client.log(&meta, ##__VA_ARGS__);                                                   \
+        }                                                                                       \
+        if constexpr (severity >= ALOG_LEVEL && severity == alog::Level::FATAL) {               \
+            constexpr static alog::Metadata meta {                                              \
+                .level = severity,                                                              \
+                .location = std::source_location::current(),                                    \
+                .fmt = format,                                                                  \
+            };                                                                                  \
+            auto st = alog::get_stacktrace();                                                   \
+            client.log(st, &meta, ##__VA_ARGS__);                                               \
         }                                                                                       \
     } while (0)
 

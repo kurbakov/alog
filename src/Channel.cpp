@@ -14,6 +14,25 @@ bool Channel::send(const Metadata* meta, const std::thread::id& id)
     return m_queue.tryPush(ev);
 }
 
+bool Channel::send(const std::string& st, const Metadata* meta, const std::thread::id& id)
+{
+    char* buffer = static_cast<char*>(m_pool.allocate());
+    if (not buffer) {
+        return false;
+    }
+
+    std::vformat_to(buffer, "{}\n{}", std::make_format_args(meta->fmt, st));
+
+    Event ev {
+        .meta = meta,
+        .tid = id,
+        .tv = alog::microsecond_time(),
+        .msg = buffer,
+    };
+
+    return m_queue.tryPush(ev);
+}
+
 bool Channel::recv(Event& log)
 {
     return m_queue.tryPop(log);

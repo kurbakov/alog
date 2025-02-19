@@ -16,7 +16,7 @@ Client::~Client()
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
-    if (auto* processor = Processor::get(); processor) {
+    if (auto* processor = Processor::get(); processor && processor->is_running()) {
         processor->unsubscribe(&m_channel);
     }
 }

@@ -49,6 +49,10 @@ gtest_discover_tests(${UNIT_TEST}
 add_executable(Logger.levels.ft test/func/LoggerLevels.ft.cpp)
 target_link_libraries(Logger.levels.ft PRIVATE ${LIB_NAME})
 
+# Log all logger levels
+add_executable(Logger.FATAL.ft test/func/LoggerFatal.ft.cpp)
+target_link_libraries(Logger.FATAL.ft PRIVATE ${LIB_NAME})
+
 # Single Thread
 add_executable(Logger.st.ft test/func/LoggerST.ft.cpp)
 target_link_libraries(Logger.st.ft PRIVATE ${LIB_NAME})

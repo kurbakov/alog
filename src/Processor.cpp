@@ -30,8 +30,24 @@ void Processor::run()
                 m_stream->log(ev.tv.tv_sec, ev.tv.tv_usec, ev.meta->level, ev.meta->location, ev.tid, msg.data());
                 channel->free(const_cast<char*>(ev.msg));
                 ev.msg = nullptr;
+
+                if (ev.meta->level == Level::FATAL) {
+                    // stop the loop and any pending events processing
+                    m_isRunning = false;
+                    break;
+                }
             }
         }
+    }
+
+    if (ev.meta->level == Level::FATAL) {
+        {
+            std::lock_guard<mutex_t> guard(m_channelsLock);
+            m_channels.clear();
+        }
+
+        // in case we stopped the loop on FATAL error
+        std::exit(0);
     }
 }
 

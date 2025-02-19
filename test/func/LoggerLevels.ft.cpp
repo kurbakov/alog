@@ -8,7 +8,11 @@ int main()
     LOG_INFO("Simple INFO log to stdout");
     LOG_WARN("Simple WARN log to stdout");
     LOG_ERROR("Simple ERROR log to stdout");
-    LOG_FATAL("Simple FATAL log to stdout");
+
+    LOG_DEBUG("Simple DEBUG log to stdout with args {}", 10);
+    LOG_INFO("Simple INFO log to stdout with args {}", 10);
+    LOG_WARN("Simple WARN log to stdout with args {}", 10);
+    LOG_ERROR("Simple ERROR log to stdout with args {}", 10);
 
     return 0;
 }
