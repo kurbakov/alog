@@ -4,7 +4,7 @@
 #include "ALogConfig.hpp"
 
 namespace alog {
-Processor* Processor::m_instance = nullptr;
+std::atomic<Processor*> Processor::m_instance { nullptr };
 
 Processor::Processor()
 {

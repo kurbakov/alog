@@ -15,7 +15,7 @@ namespace alog {
 class Processor final {
     using mutex_t = SpinLock;
 
-    static Processor* m_instance;
+    static std::atomic<Processor*> m_instance;
     std::set<Channel*> m_channels {};
     mutex_t m_channelsLock {};
     std::atomic_bool m_isRunning { false };
@@ -30,8 +30,14 @@ class Processor final {
 public:
     static void init()
     {
-        if (m_instance == nullptr) {
-            m_instance = new Processor();
+        // make sure the init is thread safe!
+        // in case if 2 threads call init, we need to make sure m_instance set only once!
+        if (m_instance.load() == nullptr) {
+            auto* processor = new Processor();
+            Processor* expected = nullptr;
+            if (!m_instance.compare_exchange_weak(expected, processor, std::memory_order_acq_rel)) {
+                delete processor;
+            }
         }
 
         // add callbacks to make sure we stop processor on exit
@@ -42,8 +48,8 @@ public:
     static void deinit()
     {
         if (m_instance) {
-            if (m_instance->is_running()) {
-                m_instance->stop();
+            if (m_instance.load()->is_running()) {
+                m_instance.load()->stop();
 
                 delete m_instance;
                 m_instance = nullptr;
@@ -53,11 +59,11 @@ public:
 
     static Processor* get()
     {
-        if (!m_instance) [[unlikely]] {
+        if (m_instance.load() == nullptr) [[unlikely]] {
             Processor::init();
         }
 
-        return m_instance;
+        return m_instance.load();
     }
 
     bool is_running()
