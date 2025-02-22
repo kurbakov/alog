@@ -23,11 +23,11 @@ public:
     void lock() noexcept;
 
     /**
-     * @brief try_lock
+     * @brief tryLock
      *
      * Function will try to lock. if lock is aquired, will return True, on dailure will return False
      */
-    bool try_lock() noexcept;
+    bool tryLock() noexcept;
 
     /**
      * @brief unlock

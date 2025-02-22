@@ -16,7 +16,7 @@ Processor::Processor()
 void Processor::run()
 {
     if constexpr (0 <= ALOG_CPU_ID) {
-        set_cpu_affinity(ALOG_CPU_ID);
+        setCpuAffinity(ALOG_CPU_ID);
     }
 
     m_isRunning.store(true);
@@ -71,7 +71,7 @@ void Processor::stop()
     m_runnerThread.join();
 }
 
-void Processor::set_stream(StreamBase* stream)
+void Processor::setStream(StreamBase* stream)
 {
     m_stream.reset(stream);
 }

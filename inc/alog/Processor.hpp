@@ -27,6 +27,18 @@ class Processor final {
     void run();
     void stop();
 
+    static void deinit()
+    {
+        if (m_instance) {
+            if (m_instance.load()->isRunning()) {
+                m_instance.load()->stop();
+
+                delete m_instance;
+                m_instance = nullptr;
+            }
+        }
+    }
+
 public:
     static void init()
     {
@@ -45,18 +57,6 @@ public:
         std::at_quick_exit([]() { Processor::deinit(); });
     }
 
-    static void deinit()
-    {
-        if (m_instance) {
-            if (m_instance.load()->is_running()) {
-                m_instance.load()->stop();
-
-                delete m_instance;
-                m_instance = nullptr;
-            }
-        }
-    }
-
     static Processor* get()
     {
         if (m_instance.load() == nullptr) [[unlikely]] {
@@ -66,12 +66,12 @@ public:
         return m_instance.load();
     }
 
-    bool is_running()
+    bool isRunning()
     {
         return m_isRunning.load();
     }
 
-    void set_stream(StreamBase* stream);
+    void setStream(StreamBase* stream);
 
     void subscribe(Channel* channel);
 

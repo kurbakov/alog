@@ -8,7 +8,7 @@
 
 namespace alog {
 
-consteval size_t placeholders_count(const std::string_view view, const std::string_view pattern)
+consteval size_t placeholdersCount(const std::string_view view, const std::string_view pattern)
 {
     size_t res { 0 }, pos { 0 };
     while (pos = view.find(pattern, pos), pos != std::string_view::npos) {
@@ -19,9 +19,9 @@ consteval size_t placeholders_count(const std::string_view view, const std::stri
 }
 
 template <typename... Args>
-consteval size_t args_count(Args&&... args) { return sizeof...(args); }
+consteval size_t argsCount(Args&&... args) { return sizeof...(args); }
 
-std::string get_stacktrace(const int max_frames = 100)
+std::string getStacktrace(const int max_frames = 100)
 {
     void* array[max_frames];
     int size;
@@ -38,7 +38,7 @@ std::string get_stacktrace(const int max_frames = 100)
     // Create a string stream to hold the stack trace
     std::ostringstream stacktrace;
     for (int i = 0; i < size; ++i) {
-        stacktrace << strings[i] << "\n";
+        stacktrace << "\t[" << i << "]\t" << strings[i] << "\n";
     }
 
     // Free the strings array

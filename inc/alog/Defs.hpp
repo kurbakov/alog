@@ -28,7 +28,6 @@ inline std::string_view LevelToStr(const Level& level)
 enum class Stream : uint8_t {
     DevNull = 0,
     IO,
-    File,
 };
 
 struct Metadata {

@@ -5,7 +5,7 @@
 static void BM_GetTID_Posix(benchmark::State& state)
 {
     for (auto _ : state) {
-        auto tid = alog::get_tid_posix();
+        auto tid = alog::getTidPosixStyle();
         benchmark::DoNotOptimize(tid);
     }
 }
@@ -13,7 +13,7 @@ static void BM_GetTID_Posix(benchmark::State& state)
 static void BM_GetTID_CPP(benchmark::State& state)
 {
     for (auto _ : state) {
-        auto tid = alog::get_tid_cpp();
+        auto tid = alog::getTidCppStyle();
         benchmark::DoNotOptimize(tid);
     }
 }
@@ -21,7 +21,7 @@ static void BM_GetTID_CPP(benchmark::State& state)
 static void BM_GetTID_C_V1(benchmark::State& state)
 {
     for (auto _ : state) {
-        auto tid = alog::get_tid_c_v1();
+        auto tid = alog::getTidCStyleV1();
         benchmark::DoNotOptimize(tid);
     }
 }
@@ -29,7 +29,7 @@ static void BM_GetTID_C_V1(benchmark::State& state)
 static void BM_GetTID_C_V2(benchmark::State& state)
 {
     for (auto _ : state) {
-        auto tid = alog::get_tid_c_v2();
+        auto tid = alog::getTidCStyleV2();
         benchmark::DoNotOptimize(tid);
     }
 }
@@ -37,7 +37,7 @@ static void BM_GetTID_C_V2(benchmark::State& state)
 static void BM_GetTID_syscall(benchmark::State& state)
 {
     for (auto _ : state) {
-        auto tid = alog::get_tid_syscall();
+        auto tid = alog::getTidViaSyscall();
         benchmark::DoNotOptimize(tid);
     }
 }

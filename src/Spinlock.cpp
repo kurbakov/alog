@@ -24,7 +24,7 @@ void SpinLock::lock() noexcept
     }
 }
 
-bool SpinLock::try_lock() noexcept
+bool SpinLock::tryLock() noexcept
 {
     // First do a relaxed load to check if lock is free in order to prevent
     // unnecessary cache misses if someone does while(!try_lock())

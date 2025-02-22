@@ -27,7 +27,7 @@ public:
         Event ev {
             .meta = meta,
             .tid = id,
-            .tv = alog::microsecond_time(),
+            .tv = alog::timeInMicrosecond(),
             .msg = buffer,
         };
 
@@ -51,7 +51,7 @@ public:
         Event ev {
             .meta = meta,
             .tid = id,
-            .tv = alog::microsecond_time(),
+            .tv = alog::timeInMicrosecond(),
             .msg = buffer,
         };
 

@@ -7,7 +7,7 @@
 
 namespace alog {
 
-inline void set_cpu_affinity(int cpu_id)
+inline void setCpuAffinity(int cpu_id)
 {
     cpu_set_t cpu_set;
     CPU_ZERO(&cpu_set);
@@ -17,27 +17,27 @@ inline void set_cpu_affinity(int cpu_id)
     }
 }
 
-inline __attribute__((always_inline)) auto get_tid_syscall()
+inline __attribute__((always_inline)) auto getTidViaSyscall()
 {
     return syscall(SYS_gettid);
 }
 
-inline __attribute__((always_inline)) auto get_tid_cpp()
+inline __attribute__((always_inline)) auto getTidCppStyle()
 {
     return std::this_thread::get_id();
 }
 
-inline __attribute__((always_inline)) auto get_tid_posix()
+inline __attribute__((always_inline)) auto getTidPosixStyle()
 {
     return pthread_self();
 }
 
-inline __attribute__((always_inline)) auto get_tid_c_v1()
+inline __attribute__((always_inline)) auto getTidCStyleV1()
 {
     return gettid();
 }
 
-inline __attribute__((always_inline)) auto get_tid_c_v2()
+inline __attribute__((always_inline)) auto getTidCStyleV2()
 {
     return thrd_current();
 }

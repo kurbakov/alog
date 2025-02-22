@@ -7,7 +7,7 @@ bool Channel::send(const Metadata* meta, const std::thread::id& id)
     Event ev {
         .meta = meta,
         .tid = id,
-        .tv = alog::microsecond_time(),
+        .tv = alog::timeInMicrosecond(),
         .msg = nullptr,
     };
 
@@ -26,7 +26,7 @@ bool Channel::send(const std::string& st, const Metadata* meta, const std::threa
     Event ev {
         .meta = meta,
         .tid = id,
-        .tv = alog::microsecond_time(),
+        .tv = alog::timeInMicrosecond(),
         .msg = buffer,
     };
 

@@ -23,40 +23,40 @@ template <>
 void initLogger<Stream::IO>()
 {
     auto* processor = Processor::get();
-    processor->set_stream(new StreamIO());
+    processor->setStream(new StreamIO());
 }
 
 template <>
 void initLogger<Stream::DevNull>()
 {
     auto* processor = Processor::get();
-    processor->set_stream(new StreamBase());
+    processor->setStream(new StreamBase());
 }
 
 } // namespace alog
 
 namespace {
 
-#define LOG(severity, format, ...)                                                              \
-    do {                                                                                        \
-        static_assert(alog::placeholders_count(format, "{}") == alog::args_count(__VA_ARGS__)); \
-        if constexpr (severity >= ALOG_LEVEL && severity < alog::Level::FATAL) {                \
-            constexpr static alog::Metadata meta {                                              \
-                .level = severity,                                                              \
-                .location = std::source_location::current(),                                    \
-                .fmt = format,                                                                  \
-            };                                                                                  \
-            client.log(&meta, ##__VA_ARGS__);                                                   \
-        }                                                                                       \
-        if constexpr (severity >= ALOG_LEVEL && severity == alog::Level::FATAL) {               \
-            constexpr static alog::Metadata meta {                                              \
-                .level = severity,                                                              \
-                .location = std::source_location::current(),                                    \
-                .fmt = format,                                                                  \
-            };                                                                                  \
-            auto st = alog::get_stacktrace();                                                   \
-            client.log(st, &meta, ##__VA_ARGS__);                                               \
-        }                                                                                       \
+#define LOG(severity, format, ...)                                                            \
+    do {                                                                                      \
+        static_assert(alog::placeholdersCount(format, "{}") == alog::argsCount(__VA_ARGS__)); \
+        if constexpr (severity >= ALOG_LEVEL && severity < alog::Level::FATAL) {              \
+            constexpr static alog::Metadata meta {                                            \
+                .level = severity,                                                            \
+                .location = std::source_location::current(),                                  \
+                .fmt = format,                                                                \
+            };                                                                                \
+            client.log(&meta, ##__VA_ARGS__);                                                 \
+        }                                                                                     \
+        if constexpr (severity >= ALOG_LEVEL && severity == alog::Level::FATAL) {             \
+            constexpr static alog::Metadata meta {                                            \
+                .level = severity,                                                            \
+                .location = std::source_location::current(),                                  \
+                .fmt = format,                                                                \
+            };                                                                                \
+            auto st = alog::getStacktrace();                                                  \
+            client.log(st, &meta, ##__VA_ARGS__);                                             \
+        }                                                                                     \
     } while (0)
 
 } // namespace

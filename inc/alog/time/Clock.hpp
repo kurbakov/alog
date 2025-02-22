@@ -9,7 +9,7 @@ namespace alog {
  * For implementation of other ARCH please see:
  *  https://github.com/google/benchmark/blob/v1.1.0/src/cycleclock.h
  */
-inline __attribute__((always_inline)) uint64_t cpu_cycle_clock()
+inline __attribute__((always_inline)) uint64_t cpuCycleClock()
 {
 #if defined(__i386__)
     int64_t ret;
@@ -23,9 +23,9 @@ inline __attribute__((always_inline)) uint64_t cpu_cycle_clock()
     return 0;
 }
 
-inline __attribute__((always_inline)) uint64_t second_time() { return time(nullptr); }
+inline __attribute__((always_inline)) uint64_t timeInSecond() { return time(nullptr); }
 
-inline __attribute__((always_inline)) timeval microsecond_time()
+inline __attribute__((always_inline)) timeval timeInMicrosecond()
 {
     timeval tv {};
     gettimeofday(&tv, nullptr);
@@ -33,7 +33,7 @@ inline __attribute__((always_inline)) timeval microsecond_time()
     return tv;
 }
 
-inline __attribute__((always_inline)) timespec nanosecond_time()
+inline __attribute__((always_inline)) timespec timeInNanosecond()
 {
     timespec timestamp {};
     clock_gettime(CLOCK_MONOTONIC, &timestamp);
@@ -41,7 +41,7 @@ inline __attribute__((always_inline)) timespec nanosecond_time()
     return timestamp;
 }
 
-inline __attribute__((always_inline)) auto chrono_time()
+inline __attribute__((always_inline)) auto timeChrono()
 {
     return std::chrono::high_resolution_clock::now();
 }
