@@ -32,13 +32,13 @@ public:
 
     void free(void* mem)
     {
-        if (is_part_of_pool(mem)) {
+        if (isPartOfPool(mem)) {
             m_ringBuffer.tryPush(mem);
         }
     }
 
 private:
-    bool is_part_of_pool(void* mem)
+    bool isPartOfPool(void* mem) const
     {
         return mem != nullptr && m_memory != nullptr && m_memory <= mem && mem <= m_memory + TSize * TCount;
     }

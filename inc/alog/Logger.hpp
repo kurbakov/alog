@@ -22,19 +22,15 @@ void initLogger();
 template <>
 void initLogger<Stream::IO>()
 {
-    Processor::init();
     auto* processor = Processor::get();
     processor->set_stream(new StreamIO());
-    std::atexit([]() { Processor::deinit(); });
 }
 
 template <>
 void initLogger<Stream::DevNull>()
 {
-    Processor::init();
     auto* processor = Processor::get();
     processor->set_stream(new StreamBase());
-    std::atexit([]() { Processor::deinit(); });
 }
 
 } // namespace alog

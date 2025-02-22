@@ -33,6 +33,10 @@ public:
         if (m_instance == nullptr) {
             m_instance = new Processor();
         }
+
+        // add callbacks to make sure we stop processor on exit
+        std::atexit([]() { Processor::deinit(); });
+        std::at_quick_exit([]() { Processor::deinit(); });
     }
 
     static void deinit()
@@ -49,6 +53,10 @@ public:
 
     static Processor* get()
     {
+        if (!m_instance) [[unlikely]] {
+            Processor::init();
+        }
+
         return m_instance;
     }
 

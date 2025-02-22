@@ -24,19 +24,33 @@ void Processor::run()
     Event ev;
     while (m_isRunning.load()) {
         std::lock_guard<mutex_t> guard(m_channelsLock);
+        bool processed_events = false;
         for (auto* channel : m_channels) {
             if (channel && channel->recv(ev)) {
+                // at least 1 event was processed
+                processed_events = true;
+
+                // check if the message was serialised or was directly copied from fmt
                 auto msg = ev.msg != nullptr ? ev.msg : ev.meta->fmt;
+
+                // push message into the output stream
                 m_stream->log(ev.tv.tv_sec, ev.tv.tv_usec, ev.meta->level, ev.meta->location, ev.tid, msg.data());
+
+                // free the memory
                 channel->free(const_cast<char*>(ev.msg));
                 ev.msg = nullptr;
 
+                // stop the loop and any pending events processing
                 if (ev.meta->level == Level::FATAL) {
-                    // stop the loop and any pending events processing
                     m_isRunning = false;
                     break;
                 }
             }
+        }
+
+        if (!processed_events) {
+            // in case if all channels did not generate any logs, sleep
+            std::this_thread::sleep_for(std::chrono::microseconds(100));
         }
     }
 
